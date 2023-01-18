@@ -41,10 +41,10 @@ public class TestDownload {
         final var HOME = System.getProperty("user.home");
         final var dir = HOME + "/.m2/repository/com/squareup/tools/build/maven-archeologist/0.0.3.1/";
         deleteDirectory(new File(dir));
-        final var downloader = new Downloader(Paths.get(HOME + "/.m2/repository"), Repo.MAVEN_CENTRAL);
+        final var downloader = new Downloader(Paths.get(HOME + "/.m2/repository"), Repo.GOOGLE_MAVEN_CENTRAL_ASIA, Repo.MAVEN_CENTRAL);
         final var files = downloader.fetch("com.squareup.tools.build:maven-archeologist:0.0.3.1");
         Assertions.assertTrue(new File(dir + "maven-archeologist-0.0.3.1.jar").exists());
-        Assertions.assertEquals(22, files.length);
+        Assertions.assertEquals(15, files.length);
     }
 
     @Test

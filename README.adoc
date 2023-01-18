@@ -62,6 +62,21 @@ You can create your own specific repository references calling
      new Repo(name, url)
 ----
 
+
+[NOTE]
+====
+If you look at the code of the library in the class `Repo.class` you can see that the predefined constants are also defined this way. For example:
+
+[source,java]
+----
+    final public static Repo MAVEN_CENTRAL = new Repo("central", "https://repo.maven.apache.org/maven2/");
+
+----
+
+assigns the repo with the name "central" to the variable `MAVEN_CENTRAL` with the well known URL of the central repo.
+You can specify as many repositories as you like as the last vararg argument to the constructor of the class `Downloader`.
+====
+
 Using the `Downloader` you can call `fetch()` to download the JAR files(s).
 The simplest way to call `fetch()` is to specify the dependency as a string.
 This string has the format `fetch("groupId:artifactId:version")`.
