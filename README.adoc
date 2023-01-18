@@ -1,0 +1,68 @@
+= Maven Downloader
+
+A simple library to download Maven dependencies.
+
+When you download a JAR from a Maven repository you also have to download the dependencies.
+To do that programmatically you can use Maven as a library, use some wrapper around it, or you can use this library.
+
+This library implements a limited POM parsing needed to discover dependencies and to download them programmatically.
+
+
+
+
+[source,java]
+----
+ 1    @Test
+ 2    void testDownload() throws Exception {
+ 3        final var HOME = System.getProperty("user.home");
+ 4        final var downloader = new Downloader(
+ 5                Paths.get(HOME + "/.m2/repository"),
+ 6                Repo.MAVEN_CENTRAL);
+ 7        final var files = downloader.fetch("com.javax0.jamal:jamal-all:1.12.5");
+ 8        Assertions.assertEquals(169, files.length);
+ 9        Arrays.sort(files);
+10        for (final var file : files) {
+11            Assertions.assertTrue(file.exists());
+12        }
+13    }
+
+----
+
+To download a Maven artifact along with the dependencies you need a `Downloader` object.
+A `Downloader` needs
+
+* a `Path` to a local repository directory where to save the downloaded files.
+
+* One or more repositories from where to look for the artifacts.
+
+The local repo path is the first argument.
+The other arguments are one or more repos.
+There are predefined repositories configured in the library.
+You can use them as in the example above.
+They are:
+
+    * `MAVEN_CENTRAL` to `https://repo.maven.apache.org/maven2/`
+
+    * `JCENTER_BINTRAY` to `https://jcenter.bintray.com/`
+
+    * `GOOGLE_ANDROID` to `https://dl.google.com/dl/android/maven2/`
+
+    * `GOOGLE_MAVEN_CENTRAL_AMERICAS` to `https://maven-central.storage-download.googleapis.com/repos/central/data/`
+
+    * `GOOGLE_MAVEN_CENTRAL_EUROPE` to `https://maven-central-eu.storage-download.googleapis.com/repos/central/data/`
+
+    * `GOOGLE_MAVEN_CENTRAL_ASIA` to `https://maven-central-asia.storage-download.googleapis.com/repos/central/data/`
+
+
+
+You can create your own specific repository references calling
+
+[source,java]
+----
+     new Repo(name, url)
+----
+
+Using the `Downloader` you can call `fetch()` to download the JAR files(s).
+The simplest way to call `fetch()` is to specify the dependency as a string.
+This string has the format `fetch("groupId:artifactId:version")`.
+The return value is an array of `java.io.File` objects pointing to the downloaded files.
