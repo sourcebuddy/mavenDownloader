@@ -11,7 +11,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,20 +38,11 @@ public class Pom {
 
     @Override
     public String toString() {
+        final var local = Paths.get(HOME + "/.m2/repository");
         if (parent == null) {
-            try {
-                return String.format(coordinates.file(Paths.get(HOME + "/.m2/repository"), ArtifactType.POM).getAbsolutePath());
-            } catch (MalformedURLException e) {
-                return String.format("[%s:%s:%s]", coordinates.groupId, coordinates.artifactId, coordinates.version);
-            }
+            return String.format(coordinates.file(local, ArtifactType.POM).getAbsolutePath());
         } else {
-            try {
-                return String.format(String.format("%s\n%s", coordinates.file(Paths.get(HOME + "/.m2/repository"), ArtifactType.POM).getAbsolutePath(), parent));
-            } catch (MalformedURLException e) {
-                return String.format("[%s:%s:%s] -> %s", coordinates.groupId, coordinates.artifactId, coordinates.version, parent);
-            }
-
-
+            return String.format(String.format("%s\n%s", coordinates.file(local, ArtifactType.POM).getAbsolutePath(), parent));
         }
     }
 
@@ -289,7 +279,7 @@ public class Pom {
         }
         final var managements = (NodeList) xPath.evaluate(MANAGEMENT, doc, XPathConstants.NODESET);
         for (int i = 1; i <= managements.getLength(); i++) {
-            final var d = thisPom.getDependency(doc, xPath,  i, MANAGEMENT);
+            final var d = thisPom.getDependency(doc, xPath, i, MANAGEMENT);
             if (d.scope() == DependencyScope.IMPORT) {
                 thisPom.imported.add(load(d, dl));
             } else {

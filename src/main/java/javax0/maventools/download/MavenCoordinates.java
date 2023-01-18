@@ -40,7 +40,7 @@ public class MavenCoordinates extends MavenCoordinates2{
         }
     }
 
-    public File file(final Path local, final ArtifactType type) throws MalformedURLException {
+    public File file(final Path local, final ArtifactType type) {
         return new File(local.toFile(),
                 groupIdDir +
                         artifactId + "/" +

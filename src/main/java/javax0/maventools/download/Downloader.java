@@ -29,7 +29,7 @@ public class Downloader {
 
     final protected Map<MavenCoordinates, Pom> poms = new HashMap<>();
 
-    public Downloader(final Path local, Repo... repos) throws ParserConfigurationException {
+    public Downloader(final Path local, Repo... repos) {
         this.local = local;
         this.repos = Arrays.asList(repos);
 
