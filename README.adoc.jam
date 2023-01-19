@@ -2,6 +2,16 @@
 
 A simple library to download Maven dependencies.
 
+{%@snip:xml pom=./pom.xml%}
+[source,xml]
+----
+<dependency>
+    <groupId>{%pom //project/groupId%}</groupId>
+    <artifactId>{%pom //project/artifactId%}</artifactId>
+    <version>{%pom //project/version%}</version>
+</dependency>
+----
+
 When you download a JAR from a Maven repository you also have to download the dependencies.
 To do that programmatically you can use Maven as a library, use some wrapper around it, or you can use this library.
 

@@ -4,7 +4,7 @@
     <name>mavenDownloader</name>
     <groupId>com.javax0.mavenDownload</groupId>
     <artifactId>mavenDownloader</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <description>This is a library that can download Maven dependencies recursively.</description>
     <licenses>
         <license>
@@ -103,6 +103,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
+                <configuration>
+                    <argLine>--add-opens mavenDownloader/javax0.maventools.download=ALL-UNNAMED</argLine>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>

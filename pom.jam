@@ -2,6 +2,7 @@
 {@import versions.jim}
 {@define taglets($x)=<taglets>$x</taglets>}
 {@define taglet($x)=<taglet>$x</taglet>}
+{@define argLine($x)=<argLine>$x</argLine>}
 {@define tagletArtifacts($x)=<tagletArtifacts>$x</tagletArtifacts>}
 {@define tagletArtifact($x)=<tagletArtifact>$x</tagletArtifact>}
 {@define tagletClass($x)=<tagletClass>$x</tagletClass>}
@@ -69,6 +70,7 @@
             }
             {plugin|
                 {GAV :org.apache.maven.plugins:maven-surefire-plugin:{SUREFIRE_PLUGIN_VERSION}}
+                {configuration|{argLine|--add-opens mavenDownloader/javax0.maventools.download=ALL-UNNAMED}}
             }
             {plugin|
                   {GAV :org.sonatype.plugins:nexus-staging-maven-plugin:{SONATYPE_PLUGIN_VERSION}}
