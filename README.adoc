@@ -2,6 +2,16 @@
 
 A simple library to download Maven dependencies.
 
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.javax0.mavenDownload</groupId>
+    <artifactId>mavenDownloader</artifactId>
+    <version>1.0.0</version>
+</dependency>
+----
+
 When you download a JAR from a Maven repository you also have to download the dependencies.
 To do that programmatically you can use Maven as a library, use some wrapper around it, or you can use this library.
 
