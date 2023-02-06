@@ -8,7 +8,7 @@ A simple library to download Maven dependencies.
 <dependency>
     <groupId>com.javax0.mavenDownload</groupId>
     <artifactId>mavenDownloader</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 </dependency>
 ----
 
@@ -22,19 +22,24 @@ This library implements a limited POM parsing needed to discover dependencies an
 
 [source,java]
 ----
- 1    @Test
- 2    void testDownload() throws Exception {
- 3        final var HOME = System.getProperty("user.home");
- 4        final var downloader = new Downloader(
- 5                Paths.get(HOME + "/.m2/repository"),
- 6                Repo.MAVEN_CENTRAL);
- 7        final var files = downloader.fetch("com.javax0.jamal:jamal-all:1.12.5");
- 8        Assertions.assertEquals(169, files.length);
- 9        Arrays.sort(files);
-10        for (final var file : files) {
-11            Assertions.assertTrue(file.exists());
-12        }
-13    }
+ 1
+ 2    private static final int NUMER_OF_FILES_IN_JAMAL_ALL_1_12_5 = 169;
+ 3
+ 4    @DisplayName("Download Jamal 1.12.5 and check that all files are downloaded")
+ 5    @Test
+ 6    void testDownload() throws Exception {
+ 7        final var HOME = System.getProperty("user.home");
+ 8        final var downloader = new Downloader(
+ 9                Paths.get(HOME + "/.m2/repository"),
+10                Repo.MAVEN_CENTRAL);
+11        downloader.exclude("com.javax0.jamal:jamal-api:*");
+12        final var files = downloader.fetch("com.javax0.jamal:jamal-all:1.12.5");
+13        Assertions.assertEquals(NUMER_OF_FILES_IN_JAMAL_ALL_1_12_5-1, files.length);
+14        Arrays.sort(files);
+15        for (final var file : files) {
+16            Assertions.assertTrue(file.exists());
+17        }
+18    }
 
 ----
 
@@ -91,3 +96,12 @@ Using the `Downloader` you can call `fetch()` to download the JAR files(s).
 The simplest way to call `fetch()` is to specify the dependency as a string.
 This string has the format `fetch("groupId:artifactId:version")`.
 The return value is an array of `java.io.File` objects pointing to the downloaded files.
+
+You can exclude dependencies from the download calling `exclude()` on the `Downloader` object.
+When you exclude a dependency it is transitive.
+However, if two artifacts _A_ and _B_ both depend on _C_ and you exclude _B_, but not _A_ then _C_ will not be excluded.
+Excluding a dependency simply means that the dependency will not be downloaded and parsed for further dependencies.
+Exclude strings can contain ``\*`` in the place of the version or the artifactId.
+GroupIds cannot contain ``*`` and are always exact matches.
+Partial matches are not supported.
+You cannot exclude version ```1.0.*``` for example.

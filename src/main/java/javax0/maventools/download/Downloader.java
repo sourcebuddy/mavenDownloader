@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class Downloader {
@@ -29,18 +30,35 @@ public class Downloader {
 
     final protected Map<MavenCoordinates, Pom> poms = new HashMap<>();
 
+    final Set<MavenCoordinatesPattern> excluded = new HashSet<>();
+
     public Downloader(final Path local, Repo... repos) {
         this.local = local;
         this.repos = Arrays.asList(repos);
+    }
 
+    public Downloader exclude(String... excludes) {
+        for (final var e : excludes) {
+            excluded.add(MavenCoordinatesPattern.fromString(e));
+        }
+        return this;
+    }
+
+    private boolean isExcluded(MavenCoordinates coordinates) {
+        for (final var e : excluded) {
+            if (e.matches(coordinates)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public File[] fetch(final String coordinates) throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
-        final var c = coordinates.split(":", 3);
-        if (c.length != 3) {
+        final var s = coordinates.split(":", 3);
+        if (s.length != 3) {
             throw new IllegalArgumentException(coordinates + " is not a valid maven coordinate, must have two : in it.");
         }
-        return fetch(new MavenCoordinates(c[0], c[1], c[2]), Set.of(ArtifactType.JAR), Set.of(Pom.DependencyScope.COMPILE));
+        return fetch(new MavenCoordinates(s[0], s[1], s[2]), Set.of(ArtifactType.JAR), Set.of(Pom.DependencyScope.COMPILE));
     }
 
     public File[] fetch(final MavenCoordinates coordinates,
@@ -50,7 +68,6 @@ public class Downloader {
         dl(coordinates, files, types, scopes);
         return files.toArray(File[]::new);
     }
-
 
     private void dl(final MavenCoordinates coordinates,
                     final ArrayList<File> files,
@@ -63,7 +80,7 @@ public class Downloader {
         while (!backlog.isEmpty()) {
             final var current = backlog.get(0);
             backlog.remove(0);
-            if (!fetched.contains(current)) {
+            if (!fetched.contains(current) && !isExcluded(current)) {
                 for (final var type : types) {
                     files.add(download(current, type));
                 }

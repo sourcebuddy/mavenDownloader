@@ -4,7 +4,7 @@
     <name>mavenDownloader</name>
     <groupId>com.javax0.mavenDownload</groupId>
     <artifactId>mavenDownloader</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <description>This is a library that can download Maven dependencies recursively.</description>
     <licenses>
         <license>

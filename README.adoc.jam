@@ -67,3 +67,12 @@ Using the `Downloader` you can call `fetch()` to download the JAR files(s).
 The simplest way to call `fetch()` is to specify the dependency as a string.
 This string has the format `fetch("groupId:artifactId:version")`.
 The return value is an array of `java.io.File` objects pointing to the downloaded files.
+
+You can exclude dependencies from the download calling `exclude()` on the `Downloader` object.
+When you exclude a dependency it is transitive.
+However, if two artifacts _A_ and _B_ both depend on _C_ and you exclude _B_, but not _A_ then _C_ will not be excluded.
+Excluding a dependency simply means that the dependency will not be downloaded and parsed for further dependencies.
+Exclude strings can contain ``\*`` in the place of the version or the artifactId.
+GroupIds cannot contain ``*`` and are always exact matches.
+Partial matches are not supported.
+You cannot exclude version ```1.0.*``` for example.

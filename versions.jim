@@ -19,7 +19,7 @@ $x
 --
 --------------------------------------------------------------------------------------------------------------------
 
-VERSION=1.0.1-SNAPSHOT                    -- https://repo.maven.apache.org/maven2/com/javax0/mavenDownload/mavenDownloader/
+VERSION=1.1.0                    -- https://repo.maven.apache.org/maven2/com/javax0/mavenDownload/mavenDownloader/
 
 GROUPID=com.javax0.mavenDownload          -- the project groupId.
 

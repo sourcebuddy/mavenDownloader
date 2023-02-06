@@ -1,0 +1,11 @@
+= Maven Downloader Releases
+
+{%@define RELEASE($x)=== https://github.com/sourcebuddy/mavenDownloader/releases/tag/$x[$x]%}
+
+{%RELEASE/1.1.0%}
+
+Exclude possibility added
+
+{%RELEASE/1.0.0%}
+
+Initial release
